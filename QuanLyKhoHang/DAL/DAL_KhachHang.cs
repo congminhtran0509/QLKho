@@ -20,9 +20,7 @@ namespace DAL
         {
             if (Load_DAL("select * from KhachHang where MaKH='" + kh.MaKH + "'").Rows.Count > 0) return 2;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_KhachHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", kh.MaKH));
@@ -30,24 +28,16 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@dc", kh.DiaChi));
                     cmd.Parameters.Add(new SqlParameter("@dt", kh.DT));
                     cmd.Parameters.Add(new SqlParameter("@email", kh.Email));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Update(KhachHang kh)
         {
             if (Load_DAL("select * from KhachHang where MaKH='" + kh.MaKH + "'").Rows.Count == 0) return 2;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Update_KhachHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ten", kh.TenKH));
@@ -55,15 +45,9 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@dt", kh.DT));
                     cmd.Parameters.Add(new SqlParameter("@email", kh.Email));
                     cmd.Parameters.Add(new SqlParameter("@ma", kh.MaKH));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Delete(KhachHang kh)
@@ -71,21 +55,13 @@ namespace DAL
             if (Load_DAL("select * from KhachHang where MaKH='" + kh.MaKH + "'").Rows.Count == 0) return 2;
             else if (Load_DAL("select * from PhieuXuat where MaKH='" + kh.MaKH + "'").Rows.Count > 0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Delete_KhachHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", kh.MaKH));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
     }
 }

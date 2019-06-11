@@ -71,9 +71,7 @@ namespace GUI
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có muốn đóng form?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes) Environment.Exit(0);
-            else e.Cancel = true;
+            Application.Exit();
         }
 
         private void chiTiếtPhiếuNhậpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -91,6 +89,23 @@ namespace GUI
         private void chiTiếtMặtHàngToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Frm_CTMH f = new Frm_CTMH();
+            f.Show();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnThoat_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn có muốn đóng form?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes) Application.Exit();
+        }
+
+        private void tìmKiếmToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Frm_TimKiem f = new Frm_TimKiem();
             f.Show();
         }
     }

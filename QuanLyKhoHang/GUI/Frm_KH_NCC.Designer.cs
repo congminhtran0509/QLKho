@@ -153,9 +153,9 @@
             this.lblLuaChon.ForeColor = System.Drawing.Color.DarkRed;
             this.lblLuaChon.Location = new System.Drawing.Point(33, 74);
             this.lblLuaChon.Name = "lblLuaChon";
-            this.lblLuaChon.Size = new System.Drawing.Size(321, 25);
+            this.lblLuaChon.Size = new System.Drawing.Size(303, 25);
             this.lblLuaChon.TabIndex = 35;
-            this.lblLuaChon.Text = "Chọn hiệu chỉnh thông tin về:";
+            this.lblLuaChon.Text = "Chọn cập nhật thông tin về:";
             // 
             // radioBtnNCC
             // 

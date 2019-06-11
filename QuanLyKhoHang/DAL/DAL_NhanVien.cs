@@ -21,10 +21,7 @@ namespace DAL
             string sql = "select * from NhanVien where MaNV = '" + nv.MaNV + "'";
             if (Load_DAL(sql).Rows.Count > 0) return 2;
             else
-            {
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_NV", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@manv", nv.MaNV));
@@ -35,17 +32,9 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@dc", nv.DiaChi));
                     cmd.Parameters.Add(new SqlParameter("@dt", nv.DT));
                     cmd.Parameters.Add(new SqlParameter("@email", nv.Email));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
             }
-            
         }
 
         public int Update(NhanVien nv)
@@ -53,9 +42,7 @@ namespace DAL
             string sql = "select * from NhanVien where MaNV = '" + nv.MaNV + "'";
             if (Load_DAL(sql).Rows.Count == 0) return 2;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Update_NV", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ht", nv.HoTen));
@@ -66,14 +53,9 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@dt", nv.DT));
                     cmd.Parameters.Add(new SqlParameter("@email", nv.Email));
                     cmd.Parameters.Add(new SqlParameter("@manv", nv.MaNV));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Delete(NhanVien nv)
@@ -82,22 +64,13 @@ namespace DAL
             else if (Load_DAL("select * from PhieuNhap where MaNV = '" + nv.MaNV + "'").Rows.Count > 0) return 3;
             else if (Load_DAL("select * from PhieuXuat where MaNV = '" + nv.MaNV + "'").Rows.Count > 0) return 4;
             else if (Load_DAL("select * from Kho where NVQL = '" + nv.MaNV + "'").Rows.Count > 0) return 5;
-            else
-                try
-                    {
-                        if (con.State != ConnectionState.Open) con.Open();
-                        SqlCommand cmd = new SqlCommand("Delete_NV", con);
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@manv", nv.MaNV));
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        return 1;
-                    }
-                    catch
-                    {
-                        if (con.State == ConnectionState.Open) con.Close();
-                        return 0;
-                    }
+            else {
+                SqlCommand cmd = new SqlCommand("Delete_NV", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@manv", nv.MaNV));
+                try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
     }
 }

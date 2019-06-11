@@ -19,49 +19,35 @@ namespace DAL
         public int Insert(MatHang mh)
         {
             if (Load_DAL("select * from MatHang where MaHang='" + mh.MaHang + "'").Rows.Count > 0) return 2;
+            else if (Load_DAL("select * from MatHang where TenHang='" + mh.TenHang + "'").Rows.Count > 0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_MatHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", mh.MaHang));
                     cmd.Parameters.Add(new SqlParameter("@ten", mh.TenHang));
                     cmd.Parameters.Add(new SqlParameter("@malh", mh.MaLH));
                     cmd.Parameters.Add(new SqlParameter("@dvt", mh.DVT));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Update(MatHang mh)
         {
             if (Load_DAL("select * from MatHang where MaHang='" + mh.MaHang + "'").Rows.Count == 0) return 2;
+            else if (Load_DAL("select * from MatHang where TenHang='" + mh.TenHang + "' and MaHang<>'"+mh.MaHang+"'").Rows.Count > 0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Update_MatHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ten", mh.TenHang));
                     cmd.Parameters.Add(new SqlParameter("@malh", mh.MaLH));
                     cmd.Parameters.Add(new SqlParameter("@dvt", mh.DVT));
                     cmd.Parameters.Add(new SqlParameter("@ma", mh.MaHang));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Delete(MatHang mh)
@@ -69,22 +55,15 @@ namespace DAL
             if (Load_DAL("select * from MatHang where MaHang='" + mh.MaHang + "'").Rows.Count == 0) return 2;
             else if (Load_DAL("select * from CTPN where MaHang='" + mh.MaHang + "'").Rows.Count > 0) return 3;
             else if (Load_DAL("select * from CTPX where MaHang='" + mh.MaHang + "'").Rows.Count > 0) return 4;
+            else if (Load_DAL("select * from CTMH where MaHang='" + mh.MaHang + "'").Rows.Count > 0) return 5;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Delete_MatHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", mh.MaHang));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
     }
 }

@@ -28,8 +28,13 @@ namespace GUI
             }
             catch
             {
-                MessageBox.Show("Lỗi kết nối!! Ứng dụng sẽ dừng, Mời bạn quay lại sau!","Lỗi",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                Environment.Exit(0);
+                MessageBox.Show("Lỗi kết nối, hãy kiểm tra lại kết nối!!\n Ứng dụng sẽ dừng, Mời bạn quay lại sau!","Lỗi",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                Application.Exit();
+            }
+            if (kho.Load_BUS("select * from NhanVien").Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu về nhân viên!! Hãy thêm nhân viên vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Dispose();
             }
             dtgvKho.DataSource = kho.Load_BUS("select * from Kho");
             txtMaKho.Text = "";
@@ -60,56 +65,111 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try
             {
                 Kho ob = new Kho(txtMaKho.Text, txtTenKho.Text, txtDC.Text, cbxMaNV.SelectedValue.ToString(), txtDT.Text);
-                i = kho.Insert(ob);
+                if(kho.Load_BUS("Select * from Kho where NVQL='" + cbxMaNV.SelectedValue.ToString() + "'").Rows.Count > 0)
+                {
+                    DialogResult result = MessageBox.Show("NVQL bạn chọn là NVQL của kho khác,\n Bạn vẫn muốn để NV này quản lý kho này ?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes) i = kho.Insert(ob);
+                    else s = "Đã hủy bỏ hành động thêm này!";
+                }
+                else i = kho.Insert(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2)
-                s = "Không thể thêm dữ liệu!!\n Mã kho này đã tồn tại!!";
-            else if (i == 1)
+            catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
             {
-                s = "Thêm thành công!!";
-                Frm_Kho_Load(sender, e);
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Thêm thành công!!";
+                    Frm_Kho_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể thêm dữ liệu!!\n Mã kho này đã tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể thêm dữ liệu!!\n Hãy chọn tên kho khác, Tên kho này đã tồn tại trong hệ thống!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể thêm dữ liệu!!";
+                    break;
             }
-            else
-                s = "Lỗi!! Không thể thêm dữ liệu!!";
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try
             {
                 Kho ob = new Kho(txtMaKho.Text, txtTenKho.Text, txtDC.Text, cbxMaNV.SelectedValue.ToString(), txtDT.Text);
-                i = kho.Update(ob);
+                if (kho.Load_BUS("Select * from Kho where NVQL='" + cbxMaNV.SelectedValue.ToString() + "' and MaKho <> '"+txtMaKho.Text+"'").Rows.Count > 0)
+                {
+                    DialogResult result = MessageBox.Show("NVQL bạn chọn là NVQL của kho khác,\n Bạn vẫn muốn để NV này quản lý kho này ?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes) i = kho.Update(ob);
+                    else s = "Đã hủy bỏ hành động sửa này!";
+                }
+                else i = kho.Update(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2)
-                s = "Mã kho này không tồn tại!!";
-            else if (i == 1) { s = "Sửa thành công!!"; Frm_Kho_Load(sender, e); }
-            else s = "Lỗi!! Không thể sửa dữ liệu!!";
+            catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Sửa thành công!!";
+                    Frm_Kho_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể sửa dữ liệu!!\n Mã kho này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể sửa dữ liệu!!\n Hãy chọn tên kho khác, Tên kho này đã có trong hệ thống!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try
             {
                 Kho ob = new Kho(txtMaKho.Text, txtTenKho.Text, txtDC.Text, cbxMaNV.SelectedValue.ToString(), txtDT.Text);
                 i = kho.Delete(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2) s = "Mã kho này không tồn tại!!";
-            if (i == 3) s = "Không thể xóa dữ liệu! Mã kho này có ràng buộc nhập hàng hóa!";
-            if (i == 4) s = "Không thể xóa dữ liệu! Mã kho này có ràng buộc xuất hàng hóa!";
-            if (i == 5) s = "Không thể xóa dữ liệu! Kho này có chứa hàng hóa!";
-            else if (i == 1) { s = "Xóa thành công!!"; Frm_Kho_Load(sender, e); }
-            else s = "Lỗi!! Không thể xóa dữ liệu!!";
+            catch {s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Xóa thành công!!"; Frm_Kho_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Mã kho này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể xóa dữ liệu! Mã kho này có ràng buộc nhập hàng hóa!";
+                    break;
+                case 4:
+                    s = "Không thể xóa dữ liệu! Mã kho này có ràng buộc xuất hàng hóa!";
+                    break;
+                case 5:
+                    s = "Không thể xóa dữ liệu! Kho này có chứa hàng hóa!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể xóa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

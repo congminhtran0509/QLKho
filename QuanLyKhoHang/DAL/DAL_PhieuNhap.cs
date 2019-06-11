@@ -20,9 +20,7 @@ namespace DAL
         {
             if (Load_DAL("select * from PhieuNhap where MaPN='" + pn.MaPN + "'").Rows.Count > 0) return 2;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_PhieuNhap", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", pn.MaPN));
@@ -30,24 +28,17 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@ngay", Convert.ToDateTime(pn.NgayNhap)));
                     cmd.Parameters.Add(new SqlParameter("@ncc", pn.MaNCC));
                     cmd.Parameters.Add(new SqlParameter("@kho", pn.MaKho));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Update(PhieuNhap pn)
         {
             if (Load_DAL("select * from PhieuNhap where MaPN='" + pn.MaPN + "'").Rows.Count == 0) return 2;
+            else if (Load_DAL("select * from CTPN where MaPN='" + pn.MaPN + "'").Rows.Count > 0 && GiaTriChuoi("select MaKho from PhieuNhap where MaPN='"+pn.MaPN+"'")!=pn.MaKho) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Update_PhieuNhap", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@nv", pn.MaNV));
@@ -55,15 +46,9 @@ namespace DAL
                     cmd.Parameters.Add(new SqlParameter("@ncc", pn.MaNCC));
                     cmd.Parameters.Add(new SqlParameter("@kho", pn.MaKho));
                     cmd.Parameters.Add(new SqlParameter("@ma", pn.MaPN));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Delete(PhieuNhap pn)
@@ -73,21 +58,30 @@ namespace DAL
             {
                 if (Load_DAL("select * from CTPN where MaPN='" + pn.MaPN + "'").Rows.Count > 0) return 3;
                 else
-                    try
                     {
-                        if (con.State != ConnectionState.Open) con.Open();
                         SqlCommand cmd = new SqlCommand("Delete_PhieuNhap", con);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@ma", pn.MaPN));
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        return 1;
-                    }
-                    catch
-                    {
-                        if (con.State == ConnectionState.Open) con.Close();
-                        return 0;
-                    }
+                        try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                        try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+                }
+            }
+        }
+
+        public string GiaTriChuoi(string sql)
+        {
+            try
+            {
+                if (con.State != ConnectionState.Open) con.Open();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                string i = (string)cmd.ExecuteScalar();
+                con.Close();
+                return i;
+            }
+            catch
+            {
+                if (con.State == ConnectionState.Open) con.Close();
+                return "";
             }
         }
     }

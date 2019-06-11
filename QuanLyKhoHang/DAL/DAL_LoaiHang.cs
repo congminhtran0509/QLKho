@@ -19,45 +19,31 @@ namespace DAL
         public int Insert(LoaiHang lh)
         {
             if (Load_DAL("select * from LoaiHang where MaLH='" + lh.MaLH + "'").Rows.Count > 0) return 2;
+            else if (Load_DAL("select * from LoaiHang where TenLH='" + lh.TenLH + "'").Rows.Count > 0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_LoaiHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@malh", lh.MaLH));
                     cmd.Parameters.Add(new SqlParameter("@tenlh", lh.TenLH));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Update(LoaiHang lh)
         {
             if (Load_DAL("select * from LoaiHang where MaLH='" + lh.MaLH + "'").Rows.Count == 0) return 2;
+            else if (Load_DAL("select * from LoaiHang where TenLH='" + lh.TenLH + "' and MaLH<>'"+lh.MaLH+"'").Rows.Count > 0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Update_LoaiHang", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@tenlh", lh.TenLH));
                     cmd.Parameters.Add(new SqlParameter("@malh", lh.MaLH));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Delete(LoaiHang lh)
@@ -67,21 +53,13 @@ namespace DAL
             {
                 if (Load_DAL("select * from MatHang where MaLH ='" + lh.MaLH + "'").Rows.Count > 0) return 3;
                 else
-                    try
                     {
-                        if (con.State != ConnectionState.Open) con.Open();
                         SqlCommand cmd = new SqlCommand("Delete_LoaiHang", con);
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add(new SqlParameter("@malh", lh.MaLH));
-                        cmd.ExecuteNonQuery();
-                        con.Close();
-                        return 1;
-                    }
-                    catch
-                    {
-                        if (con.State == ConnectionState.Open) con.Close();
-                        return 0;
-                    }
+                        try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                        try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+                }
             }
         }
     }

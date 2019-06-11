@@ -24,3 +24,4 @@ E:\HK4\TTNN\QuanLyKhoHang\GUI\obj\Debug\GUI.Frm_MatHang.resources
 E:\HK4\TTNN\QuanLyKhoHang\GUI\obj\Debug\GUI.Frm_PN_PX.resources
 E:\HK4\TTNN\QuanLyKhoHang\GUI\obj\Debug\GUI.Frm_CTPN_CTPX.resources
 E:\HK4\TTNN\QuanLyKhoHang\GUI\obj\Debug\GUI.Frm_CTMH.resources
+E:\HK4\TTNN\QuanLyKhoHang\GUI\obj\Debug\GUI.Frm_TimKiem.resources

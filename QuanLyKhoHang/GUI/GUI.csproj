@@ -106,6 +106,12 @@
     <Compile Include="Frm_PN_PX.Designer.cs">
       <DependentUpon>Frm_PN_PX.cs</DependentUpon>
     </Compile>
+    <Compile Include="Frm_TimKiem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm_TimKiem.Designer.cs">
+      <DependentUpon>Frm_TimKiem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmLogin.resx">
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Frm_PN_PX.resx">
       <DependentUpon>Frm_PN_PX.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm_TimKiem.resx">
+      <DependentUpon>Frm_TimKiem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

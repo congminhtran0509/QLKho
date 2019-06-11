@@ -43,13 +43,28 @@ namespace GUI
             catch
             {
                 MessageBox.Show("Lỗi kết nối!! Ứng dụng sẽ dừng, Mời bạn quay lại sau!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(0);
+                Application.Exit();
+            }
+            if (pn.Load_BUS("select * from NhanVien").Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu về nhân viên!! Hãy thêm nhân viên vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Dispose();
+            }
+            if (pn.Load_BUS("select * from Kho").Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu về kho!! Hãy thêm kho vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Dispose();
             }
             cbxMaKho.DataSource = pn.Load_BUS("select * from Kho");
             cbxMaKho.DisplayMember = "TenKho";
             cbxMaKho.ValueMember = "MaKho";
             if (radioBtnPN.Checked)
             {
+                if (pn.Load_BUS("select * from NhaCC").Rows.Count == 0)
+                {
+                    MessageBox.Show("Không có dữ liệu về nhà cung cấp!! Hãy thêm nhà cung cấp vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Dispose();
+                }
                 cbxMaDoiTac.DataSource = pn.Load_BUS("select * from NhaCC");
                 cbxMaDoiTac.DisplayMember = "TenNCC";
                 cbxMaDoiTac.ValueMember = "MaNCC";
@@ -57,6 +72,11 @@ namespace GUI
             }
             else if (radioBtnPX.Checked)
             {
+                if (pn.Load_BUS("select * from KhachHang").Rows.Count == 0)
+                {
+                    MessageBox.Show("Không có dữ liệu về khách hàng!! Hãy thêm khách hàng vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Dispose();
+                }
                 cbxMaDoiTac.DataSource = pn.Load_BUS("select * from KhachHang");
                 cbxMaDoiTac.DisplayMember = "TenKH";
                 cbxMaDoiTac.ValueMember = "MaKH";
@@ -71,7 +91,7 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnPN.Checked)
             {
                 try
@@ -79,7 +99,7 @@ namespace GUI
                     PhieuNhap ob = new PhieuNhap(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = pn.Insert(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnPX.Checked)
             {
@@ -88,18 +108,30 @@ namespace GUI
                     PhieuXuat ob = new PhieuXuat(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = px.Insert(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2) s = "Không thể thêm dữ liệu!!\n Mã phiếu này đã tồn tại!!";
-            else if (i == 1) { s = "Thêm thành công!!"; btnLoad_Click(sender, e); }
-            else
-                s = "Lỗi!! Không thể thêm dữ liệu!!";
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Thêm thành công!!";
+                    btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể thêm dữ liệu!!\n Mã phiếu này đã tồn tại!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể thêm dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnPN.Checked)
             {
                 try
@@ -107,7 +139,7 @@ namespace GUI
                     PhieuNhap ob = new PhieuNhap(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = pn.Update(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnPX.Checked)
             {
@@ -116,17 +148,33 @@ namespace GUI
                     PhieuXuat ob = new PhieuXuat(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = px.Update(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2) s = "Mã phiếu này không tồn tại!!";
-            else if (i == 1) { s = "Sửa thành công!!"; btnLoad_Click(sender, e); }
-            else s = "Lỗi!! Không thể sửa dữ liệu!!";
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Sửa thành công!!";
+                    btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể sửa dữ liệu!!\n Mã phiếu này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể sửa mã kho của phiếu, phiếu này đã giao dịch các mặt hàng của kho!! Hãy xóa chi tiết phiếu!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnPN.Checked)
             {
                 try
@@ -134,7 +182,7 @@ namespace GUI
                     PhieuNhap ob = new PhieuNhap(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = pn.Delete(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnPX.Checked)
             {
@@ -143,12 +191,27 @@ namespace GUI
                     PhieuXuat ob = new PhieuXuat(txtMa.Text, cbxMaNV.SelectedValue.ToString(), da_tiNgayNX.Value.ToString(), cbxMaDoiTac.SelectedValue.ToString(), cbxMaKho.SelectedValue.ToString());
                     i = px.Delete(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2) s = "Mã phiếu này không tồn tại!!";
-            else if (i == 3) s = "Không thể xóa do mã phiếu này có giao dịch các mặt hàng!!";
-            else if (i == 1) { s = "Xóa thành công!!"; btnLoad_Click(sender, e); }
-            else s = "Lỗi!! Không thể xóa dữ liệu!!";
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Xóa thành công!!";
+                    btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể xóa dữ liệu!!\n Mã phiếu này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể xóa do mã phiếu này có giao dịch các mặt hàng!!\n Hãy xóa chi tiết phiếu!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể xóa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

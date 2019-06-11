@@ -202,9 +202,9 @@
             this.lblLuaChon.ForeColor = System.Drawing.Color.DarkRed;
             this.lblLuaChon.Location = new System.Drawing.Point(51, 63);
             this.lblLuaChon.Name = "lblLuaChon";
-            this.lblLuaChon.Size = new System.Drawing.Size(286, 24);
+            this.lblLuaChon.Size = new System.Drawing.Size(267, 24);
             this.lblLuaChon.TabIndex = 57;
-            this.lblLuaChon.Text = "Chọn hiệu chỉnh thông tin về:";
+            this.lblLuaChon.Text = "Chọn cập nhật thông tin về:";
             // 
             // lblThongTin
             // 

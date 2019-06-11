@@ -1,4 +1,28 @@
-﻿-- insert du lieu vào bảng nhân viên
+﻿
+-- tạo tai khoan
+create proc TaoTaiKhoan
+	@usr nvarchar(50),
+	@psw nvarchar(20)
+as
+	insert into Login values(@usr,@psw)
+go
+
+-- doi mat khau
+create proc DoiMatKhau
+	@usr nvarchar(50),
+	@psw nvarchar(20)
+as
+	update Login set Password=@psw where UserName=@usr
+go
+
+-- Xoa tai khoan
+create proc XoaTaiKhoan
+	@usr nvarchar(50)
+as 
+	delete from Login where UserName=@usr
+go
+
+-- insert du lieu vào bảng nhân viên
 create proc Insert_NV
 	@manv nchar(10),
 	@ht nvarchar(50),
@@ -182,7 +206,7 @@ as
 go
 
 -- update du lieu bảng Phieu Nhap
-create proc Update_PhieuNhap
+alter proc Update_PhieuNhap
 	@ma nchar(10),
 	@nv nchar(10),
 	@ngay date,
@@ -191,6 +215,7 @@ create proc Update_PhieuNhap
 as
 	update PhieuNhap set MaNV=@nv,NgayNhap=@ngay,MaNCC=@ncc,MaKho=@kho where MaPN=@ma
 go
+
 
 -- delete du lieu bảng Phieu Nhap
 create proc Delete_PhieuNhap
@@ -211,7 +236,7 @@ as
 go
 
 -- update du lieu bảng Phieu Xuat
-create proc Update_PhieuXuat
+alter proc Update_PhieuXuat
 	@ma nchar(10),
 	@nv nchar(10),
 	@ngay date,
@@ -288,12 +313,6 @@ begin
 end
 go
 
-exec Insert_CTPX 'PX02','MH01',20,3000
-exec Update_CTPX 'PX02','MH01',51,3000
-exec Delete_CTPX 'PX04','MH01'
-select * from CTMH
-select * from CTPX
-select * from PhieuXuat
 
 -- insert du lieu vào bảng CTPX
 alter proc Insert_CTPX

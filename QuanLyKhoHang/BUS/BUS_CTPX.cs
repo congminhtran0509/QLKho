@@ -24,10 +24,6 @@ namespace BUS
         {
             return ctpx.Delete(h);
         }
-        public int TinhSL(string sql)
-        {
-            return ctpx.TinhSL(sql);
-        }
         public DataTable Load_BUS(string sql)
         {
             return ctpx.Load_DAL(sql);

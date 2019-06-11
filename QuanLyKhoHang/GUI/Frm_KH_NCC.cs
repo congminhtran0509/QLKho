@@ -55,7 +55,7 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnKH.Checked)
             {
                 try
@@ -63,7 +63,7 @@ namespace GUI
                     KhachHang ob = new KhachHang(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = kh.Insert(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnNCC.Checked)
             {
@@ -72,17 +72,24 @@ namespace GUI
                     NhaCC ob = new NhaCC(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = ncc.Insert(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2)
-                s = "Không thể thêm dữ liệu!!\n Mã đối tác này đã tồn tại!!";
-            else if (i == 1)
+            switch (i)
             {
-                s = "Thêm thành công!!";
-                btnLoad_Click(sender, e);
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Thêm thành công!!";
+                    btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể thêm dữ liệu!!\n Mã đối tác này đã tồn tại!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể thêm dữ liệu!!";
+                    break;
             }
-            else
-                s = "Lỗi!! Không thể thêm dữ liệu!!";
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -94,7 +101,7 @@ namespace GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnKH.Checked)
             {
                 try
@@ -102,7 +109,7 @@ namespace GUI
                     KhachHang ob = new KhachHang(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = kh.Update(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch {s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnNCC.Checked)
             {
@@ -111,18 +118,30 @@ namespace GUI
                     NhaCC ob = new NhaCC(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = ncc.Update(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2)
-                s = "Mã đối tác này không tồn tại!!";
-            else if (i == 1) { s = "Sửa thành công!!"; btnLoad_Click(sender, e); }
-            else s = "Lỗi!! Không thể sửa dữ liệu!!";
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Sửa thành công!!";
+                   btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể sửa dữ liệu!!\n Mã đối tác này không tồn tại!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             if (radioBtnKH.Checked)
             {
                 try
@@ -130,7 +149,7 @@ namespace GUI
                     KhachHang ob = new KhachHang(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = kh.Delete(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
             else if (radioBtnNCC.Checked)
             {
@@ -139,12 +158,27 @@ namespace GUI
                     NhaCC ob = new NhaCC(txtMa.Text, txtTen.Text, txtDC.Text, txtDT.Text, txtEmail.Text);
                     i = ncc.Delete(ob);
                 }
-                catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+                catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
             }
-            if (i == 2) s = "Mã đối tác này không tồn tại!!";
-            if (i == 3) s = "Không thể xóa!! Mã đối tác này tồn tại trong bảng giao dịch!";
-            else if (i == 1) { s = "Xóa thành công!!"; btnLoad_Click(sender, e); }
-            else s = "Lỗi!! Không thể xóa dữ liệu!!";
+            switch (i)
+            {
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Xóa thành công!!";
+                    btnLoad_Click(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể xóa dữ liệu!!\n Mã đối tác này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể xóa!!\n Đối tác này tồn tại trong bảng giao dịch!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể xóa dữ liệu!!";
+                    break;
+            }
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

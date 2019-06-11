@@ -18,29 +18,19 @@ namespace DAL
 
         public int Insert(CTPN ctpn)
         {
-            if (Load_DAL("select * from PhieuNhap where MaPN='" + ctpn.MaPN + "'").Rows.Count == 0) return 3;
-            else if (Load_DAL("select * from MatHang where MaHang='" + ctpn.MaHang + "'").Rows.Count == 0) return 4;
-            else if (Load_DAL("select * from CTPN where MaPN='" + ctpn.MaPN + "' and MaHang='" + ctpn.MaHang + "'").Rows.Count > 0) return 2;
-            else if (ctpn.SoLuong <= 0 || ctpn.DonGia<0) return 5;
+            if (Load_DAL("select * from CTPN where MaPN='" + ctpn.MaPN + "' and MaHang='" + ctpn.MaHang + "'").Rows.Count > 0) return 2;
+            else if (ctpn.SoLuong <= 0 || ctpn.DonGia<0) return 3;
             else
-                try
                 {
-                    if (con.State != ConnectionState.Open) con.Open();
                     SqlCommand cmd = new SqlCommand("Insert_CTPN", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.Add(new SqlParameter("@ma", ctpn.MaPN));
                     cmd.Parameters.Add(new SqlParameter("@mh", ctpn.MaHang));
                     cmd.Parameters.Add(new SqlParameter("@sl", ctpn.SoLuong));
                     cmd.Parameters.Add(new SqlParameter("@dg", ctpn.DonGia));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
 
         public int Update(CTPN ctpn)
@@ -48,46 +38,32 @@ namespace DAL
             if (Load_DAL("select * from CTPN where MaPN='" + ctpn.MaPN + "' and MaHang='" + ctpn.MaHang + "'").Rows.Count == 0) return 2;
             else if (ctpn.SoLuong <= 0 || ctpn.DonGia < 0) return 3;
             else
-                try
-                {
-                    if (con.State != ConnectionState.Open) con.Open();
-                    SqlCommand cmd = new SqlCommand("Update_CTPN", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@sl", ctpn.SoLuong));
-                    cmd.Parameters.Add(new SqlParameter("@dg", ctpn.DonGia));
-                    cmd.Parameters.Add(new SqlParameter("@ma", ctpn.MaPN));
-                    cmd.Parameters.Add(new SqlParameter("@mh", ctpn.MaHang));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+            {
+                SqlCommand cmd = new SqlCommand("Update_CTPN", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@sl", ctpn.SoLuong));
+                cmd.Parameters.Add(new SqlParameter("@dg", ctpn.DonGia));
+                cmd.Parameters.Add(new SqlParameter("@ma", ctpn.MaPN));
+                cmd.Parameters.Add(new SqlParameter("@mh", ctpn.MaHang));
+                try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
+               
         }
 
         public int Delete(CTPN ctpn)
         {
             if (Load_DAL("select * from CTPN where MaPN='" + ctpn.MaPN + "' and MaHang='" + ctpn.MaHang + "'").Rows.Count == 0) return 2;
             else
-                try
-                {
-                    if (con.State != ConnectionState.Open) con.Open();
-                    SqlCommand cmd = new SqlCommand("Delete_CTPN", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@ma", ctpn.MaPN));
-                    cmd.Parameters.Add(new SqlParameter("@mh", ctpn.MaHang));
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    return 1;
-                }
-                catch
-                {
-                    if (con.State == ConnectionState.Open) con.Close();
-                    return 0;
-                }
+            {
+                if (con.State != ConnectionState.Open) con.Open();
+                SqlCommand cmd = new SqlCommand("Delete_CTPN", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ma", ctpn.MaPN));
+                cmd.Parameters.Add(new SqlParameter("@mh", ctpn.MaHang));
+                try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            }
         }
     }
 }

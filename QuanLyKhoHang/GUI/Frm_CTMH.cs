@@ -22,8 +22,26 @@ namespace GUI
         private void Frm_CTMH_Load(object sender, EventArgs e)
         {
             cbxMaKho.DataSource = ctmh.Load_BUS("select * from Kho");
-            cbxMaKho.DisplayMember = "TenKho";
-            cbxMaKho.ValueMember = "MaKho";
+            try
+            {
+                cbxMaKho.DisplayMember = "TenKho";
+                cbxMaKho.ValueMember = "MaKho";
+            }
+            catch
+            {
+                MessageBox.Show("Lỗi kết nối!! Ứng dụng sẽ dừng, Mời bạn quay lại sau!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+            if (ctmh.Load_BUS("select * from Kho").Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu về kho!! Hãy thêm kho vào hệ thống!","Thông tin",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                this.Dispose();
+            }
+            if (ctmh.Load_BUS("select * from MatHang").Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu về mặt hàng!! Hãy thêm các mặt hàng vào hệ thống!", "Thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Dispose();
+            }
             cbxMaMH.DataSource = ctmh.Load_BUS("select * from MatHang");
             cbxMaMH.DisplayMember = "TenHang";
             cbxMaMH.ValueMember = "MaHang";
@@ -35,23 +53,31 @@ namespace GUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try {
                 CTMH ob = new CTMH(cbxMaKho.SelectedValue.ToString(), cbxMaMH.SelectedValue.ToString(), Convert.ToInt32(txtSL.Text));
                 i = ctmh.Insert(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2) s = "Không thể thêm dữ liệu!!\n Chi tiết mặt hàng này đã tồn tại!!";
-            else if (i == 3) s = "Mã kho này không tồn tại!!";
-            else if (i == 4) s = "Mặt hàng này không tồn tại!!";
-            else if (i == 5) s = "Giá trị số lượng không hợp lệ!!";
-            else if (i == 1)
+            catch { s = "Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
             {
-                s = "Thêm thành công!!";
-                Frm_CTMH_Load(sender, e);
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Thêm thành công!!";
+                    Frm_CTMH_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể thêm dữ liệu!!\n Chi tiết mặt hàng này đã tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể thêm dữ liệu!!\n Giá trị số lượng không hợp lệ!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
             }
-            else
-                s = "Lỗi!! Không thể thêm dữ liệu!!";
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -74,42 +100,60 @@ namespace GUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try
             {
                 CTMH ob = new CTMH(cbxMaKho.SelectedValue.ToString(), cbxMaMH.SelectedValue.ToString(), Convert.ToInt32(txtSL.Text));
                 i = ctmh.Update(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2) s = "Không thể sửa!!\n Chi tiết mặt hàng này không tồn tại!!";
-            else if (i == 3) s = "Giá trị số lượng không hợp lệ!!";
-            else if (i == 1)
+            catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
             {
-                s = "Sửa thành công!!";
-                Frm_CTMH_Load(sender, e);
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Sửa thành công!!";
+                    Frm_CTMH_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể sửa dữ liệu!!\n Chi tiết mặt hàng này không tồn tại!!";
+                    break;
+                case 3:
+                    s = "Không thể sửa dữ liệu!!\n Giá trị số lượng không hợp lệ!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
             }
-            else
-                s = "Lỗi!! Không thể sửa dữ liệu!!";
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
-            int i = 0; string s = "";
+            int i = -1; string s = "";
             try
             {
                 CTMH ob = new CTMH(cbxMaKho.SelectedValue.ToString(), cbxMaMH.SelectedValue.ToString(), Convert.ToInt32(txtSL.Text));
                 i = ctmh.Delete(ob);
             }
-            catch { MessageBox.Show("Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (i == 2) s = "Không thể xóa!!\n Chi tiết mặt hàng này không tồn tại!!";
-            else if (i == 1)
+            catch { s="Dữ liệu đã nhập không phù hợp!\n Mời nhập lại!!"; }
+            switch (i)
             {
-                s = "Xóa thành công!!";
-                Frm_CTMH_Load(sender, e);
+                case -2:
+                    s = "Lỗi kết nối!!";
+                    break;
+                case 1:
+                    s = "Xóa thành công!!";
+                    Frm_CTMH_Load(sender, e);
+                    break;
+                case 2:
+                    s = "Không thể xóa dữ liệu!!\n Chi tiết mặt hàng này không tồn tại!!";
+                    break;
+                case 0:
+                    s = "Lỗi!! Không thể sửa dữ liệu!!";
+                    break;
             }
-            else
-                s = "Lỗi!! Không thể xóa dữ liệu!!";
             MessageBox.Show(s, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
