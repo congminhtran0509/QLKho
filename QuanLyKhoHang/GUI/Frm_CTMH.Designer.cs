@@ -179,6 +179,7 @@
             this.Controls.Add(this.lblMaKho);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_CTMH";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frm_CTMH";
             this.Load += new System.EventHandler(this.Frm_CTMH_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvCTMH)).EndInit();

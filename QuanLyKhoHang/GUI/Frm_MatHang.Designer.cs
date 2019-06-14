@@ -199,6 +199,7 @@
             this.Controls.Add(this.lblMaMH);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_MatHang";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frm_MatHang";
             this.Load += new System.EventHandler(this.Frm_MatHang_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvMatHang)).EndInit();

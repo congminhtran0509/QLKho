@@ -272,6 +272,7 @@
             this.Controls.Add(this.lblLuaChon);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_CTPN_CTPX";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin về chi tiết nhập / xuất";
             this.Load += new System.EventHandler(this.Frm_CTPN_CTPX_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvCTPNX)).EndInit();

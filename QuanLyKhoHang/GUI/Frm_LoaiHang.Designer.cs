@@ -156,6 +156,7 @@
             this.Controls.Add(this.lblMaLH);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_LoaiHang";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin về loại mặt hàng";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Frm_LoaiHang_FormClosing);

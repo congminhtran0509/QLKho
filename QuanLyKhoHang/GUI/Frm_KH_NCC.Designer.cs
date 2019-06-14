@@ -275,6 +275,7 @@
             this.Controls.Add(this.txtMa);
             this.Controls.Add(this.lblMa);
             this.Name = "Frm_KH_NCC";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin đối tác";
             this.Load += new System.EventHandler(this.Frm_KH_NCC_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvDoiTac)).EndInit();

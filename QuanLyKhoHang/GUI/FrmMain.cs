@@ -12,6 +12,7 @@ namespace GUI
 {
     public partial class FrmMain : Form
     {
+        public static string username="";
         public FrmMain()
         {
             InitializeComponent();
@@ -21,10 +22,6 @@ namespace GUI
         {
             Frm_NhanVien f = new Frm_NhanVien();
             f.Show();
-        }
-
-        private void btnThoat_Click(object sender, EventArgs e)
-        {
         }
 
         private void loạiHàngToolStripMenuItem_Click(object sender, EventArgs e)
@@ -71,7 +68,9 @@ namespace GUI
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Application.Exit();
+            DialogResult result = MessageBox.Show("Bạn thật sự muốn đăng xuất?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result != DialogResult.OK)
+                e.Cancel = true;
         }
 
         private void chiTiếtPhiếuNhậpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -94,19 +93,24 @@ namespace GUI
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void btnThoat_Click_1(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Bạn có muốn đóng form?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes) Application.Exit();
+            lblUserName.Text = username;
         }
 
         private void tìmKiếmToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Frm_TimKiem f = new Frm_TimKiem();
             f.Show();
+        }
+
+        private void inBáoCáoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Frm_BaoCao f = new Frm_BaoCao();
+            f.Show();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

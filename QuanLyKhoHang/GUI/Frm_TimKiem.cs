@@ -90,8 +90,100 @@ namespace GUI
                 else
                     sql = "select * from Kho";
             }
+            else if (i == 5)
+            {
+                if (k == 0)
+                    sql = "select distinct MatHang.*,TenLH from MatHang inner join LoaiHang on MatHang.MaLH=LoaiHang.MaLH where MaHang like '%" 
+                        + txtNoiDung.Text + "%' or TenHang like N'%" + txtNoiDung.Text + "%' or MatHang.MaLH like '%" + txtNoiDung.Text 
+                        + "%' or TenLH like N'%"+txtNoiDung.Text+"%'";
+                else
+                    sql = "select * from MatHang";
+            }
+            else if (i == 6)
+            {
+                if (k == 0)
+                    sql = "select distinct PhieuNhap.*,TenNV,TenNCC,TenKho from PhieuNhap inner join NhanVien on PhieuNhap.MaNV=NhanVien.MaNV " +
+                        "inner join NhaCC on PhieuNhap.MaNCC=NhaCC.MaNCC inner join Kho on Kho.MaKho=PhieuNhap.MaKho where PhieuNhap.MaPN like '%"
+                        + txtNoiDung.Text + "%' or PhieuNhap.MaNV like '%" + txtNoiDung.Text + "%' or TenNV like N'%" + txtNoiDung.Text
+                        + "%' or PhieuNhap.MaNCC like '%" + txtNoiDung.Text + "%' or TenNCC like N'%" + txtNoiDung.Text + "%' or PhieuNhap.MaKho like '%"
+                        + txtNoiDung.Text + "%' or TenKho like N'%" + txtNoiDung.Text + "%' order by NgayNhap desc";
+                else if (k == 1)
+                    try
+                    {
+                        sql = "select * from PhieuNhap where Month(NgayNhap) = Convert(int,Left('" + txtNoiDung.Text + "',2)) " +
+                            " and year(NgayNhap)=Convert(int,right(rtrim('" + txtNoiDung.Text +"'),4)) order by NgayNhap asc";
+                    }
+                    catch (Exception ex) { MessageBox.Show("Dữ liệu cần tìm đã nhập không hợp lệ!\n" + ex, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                else if (k == 2)
+                    try
+                    {
+                        sql = "select * from PhieuNhap where NgayNhap = '" + Convert.ToDateTime(txtNoiDung.Text) + "'";
+                    }
+                    catch (Exception ex) { MessageBox.Show("Dữ liệu cần tìm đã nhập không hợp lệ!\n" + ex, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                else
+                    sql = "select * from PhieuNhap order by NgayNhap desc";
+            }
+            else if (i == 7)
+            {
+                if (k == 0)
+                    sql = "select distinct PhieuXuat.*,TenNV,TenKH,TenKho from PhieuXuat inner join NhanVien on PhieuXuat.MaNV=NhanVien.MaNV " +
+                        "inner join KhachHang on PhieuXuat.MaKH=KhachHang.MaKH inner join Kho on Kho.MaKho=PhieuXuat.MaKho where PhieuXuat.MaPX like '%"
+                        + txtNoiDung.Text + "%' or PhieuXuat.MaNV like '%" + txtNoiDung.Text + "%' or TenNV like N'%" + txtNoiDung.Text
+                        + "%' or PhieuXuat.MaKH like '%" + txtNoiDung.Text + "%' or TenKH like N'%" + txtNoiDung.Text + "%' or PhieuXuat.MaKho like '%"
+                        + txtNoiDung.Text + "%' or TenKho like N'%" + txtNoiDung.Text + "%'  order by NgayXuat desc";
+                else if (k == 1)
+                    try
+                    {
+                        sql = "select * from PhieuXuat where Month(NgayXuat) = Convert(int,Left('" + txtNoiDung.Text + "',2)) " +
+                            " and year(NgayXuat)=Convert(int,right(rtrim('" + txtNoiDung.Text + "'),4)) order by NgayXuat asc";
+                    }
+                    catch (Exception ex) { MessageBox.Show("Dữ liệu cần tìm đã nhập không hợp lệ!\n" + ex, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                else if (k == 2)
+                    try
+                    {
+                        sql = "select * from PhieuXuat where NgayXuat = '" + Convert.ToDateTime(txtNoiDung.Text) + "'";
+                    }
+                    catch (Exception ex) { MessageBox.Show("Dữ liệu cần tìm đã nhập không hợp lệ!\n" + ex, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                else
+                    sql = "select * from PhieuXuat order by NgayXuat desc";
+            }
+            else if (i == 8)
+            {
+                if (k == 0)
+                    sql = "select distinct CTPN.*,TenHang from MatHang inner join CTPN on MatHang.MaHang=CTPN.MaHang inner join PhieuNhap " +
+                        " on PhieuNhap.MaPN=CTPN.MaPN where CTPN.MaPN like '%" + txtNoiDung.Text + "%' or CTPN.MaHang like '%"
+                        + txtNoiDung.Text + "%' or TenHang like N'%" + txtNoiDung.Text + "%'";
+                else
+                    sql = "select * from CTPN";
+            }
+            else if (i == 9)
+            {
+                if (k == 0)
+                    sql = "select distinct CTPX.*,TenHang from MatHang inner join CTPX on MatHang.MaHang=CTPX.MaHang inner join PhieuXuat " +
+                        " on PhieuXuat.MaPX=CTPX.MaPX where CTPX.MaPX like '%" + txtNoiDung.Text + "%' or CTPX.MaHang like '%"
+                        + txtNoiDung.Text + "%' or TenHang like N'%" + txtNoiDung.Text + "%'";
+                else
+                    sql = "select * from CTPX";
+            }
+            else if (i == 10)
+            {
+                if (k == 0)
+                    sql = "select distinct CTMH.*,TenHang,TenKho,TenLH from MatHang inner join CTMH on MatHang.MaHang=CTMH.MaHang inner join Kho " +
+                        " on Kho.MaKho=CTMH.MaKho inner join LoaiHang on MatHang.MaLH=loaiHang.MaLH where CTMH.MaKho like '%" + txtNoiDung.Text 
+                        + "%' or CTMH.MaHang like '%" + txtNoiDung.Text + "%' or TenHang like N'%" + txtNoiDung.Text + "%' or TenKho like N'%" 
+                        + txtNoiDung.Text + "%' or MatHang.MaLH like '%" + txtNoiDung.Text + "%' or TenLH like N'%" + txtNoiDung.Text + "%'";
+                else if (k == 1)
+                    try
+                    {
+                        sql = "select * from CTMH where SoLuong < " + Convert.ToInt32(txtNoiDung.Text);
+                    }
+                    catch (Exception ex) { MessageBox.Show("Dữ liệu cần tìm đã nhập không hợp lệ!\n" + ex, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                else
+                    sql = "select * from CTMH";
+            }
             dtgvKQ.DataSource = login.Load_BUS(sql);
             txtKQ.Text = login.Load_BUS(sql).Rows.Count.ToString();
+            MessageBox.Show("Hoàn thành tìm kiếm!\n", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void cbxLuaChon_SelectedIndexChanged(object sender, EventArgs e)
@@ -119,7 +211,8 @@ namespace GUI
             else if (i == 6 || i==7)
             {
                 cbxLuaChon2.Items.Add("Mã phiếu, Nhân viên, Đối tác hoặc Kho");
-                cbxLuaChon2.Items.Add("Ngày, Tháng hoặc Năm");
+                cbxLuaChon2.Items.Add("Tháng (MM/YYYY)");
+                cbxLuaChon2.Items.Add("Ngày (MM/DD/YYYY)");
             }
             else if (i == 8 || i==9)
             {
@@ -127,11 +220,14 @@ namespace GUI
             }
             else if (i == 10)
             {
-                cbxLuaChon2.Items.Add("Hàng hóa hoặc Kho");
-                cbxLuaChon2.Items.Add("Số lượng");
+                cbxLuaChon2.Items.Add("Hàng hóa hoặc Kho hoặc Loại hàng");
+                cbxLuaChon2.Items.Add("Số lượng < x");
             }
         }
 
-        
+        private void btnTrangChinh_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

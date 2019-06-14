@@ -280,6 +280,7 @@
             this.Controls.Add(this.lblLuaChon);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_PN_PX";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frm_PN_PX";
             this.Load += new System.EventHandler(this.Frm_PN_PX_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvPhieuNX)).EndInit();

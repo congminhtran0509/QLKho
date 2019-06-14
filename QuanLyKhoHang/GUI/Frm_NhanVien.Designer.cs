@@ -117,7 +117,7 @@
             // 
             // da_tiNgaySinh
             // 
-            this.da_tiNgaySinh.CustomFormat = "yyyy/mm/dd";
+            this.da_tiNgaySinh.CustomFormat = "";
             this.da_tiNgaySinh.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.da_tiNgaySinh.Location = new System.Drawing.Point(166, 128);
             this.da_tiNgaySinh.Name = "da_tiNgaySinh";
@@ -301,6 +301,7 @@
             this.Controls.Add(this.txtMaNV);
             this.Controls.Add(this.lblMaNV);
             this.Name = "Frm_NhanVien";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin  nhân viên";
             this.Load += new System.EventHandler(this.Frm_NhanVien_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvNhanVien)).EndInit();

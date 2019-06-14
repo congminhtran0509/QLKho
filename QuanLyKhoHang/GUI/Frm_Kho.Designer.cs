@@ -220,6 +220,7 @@
             this.Controls.Add(this.lblMaKho);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_Kho";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thông tin về kho";
             this.Load += new System.EventHandler(this.Frm_Kho_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvKho)).EndInit();

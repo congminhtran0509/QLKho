@@ -59,6 +59,7 @@
             this.txtPasswd.Name = "txtPasswd";
             this.txtPasswd.Size = new System.Drawing.Size(206, 20);
             this.txtPasswd.TabIndex = 3;
+            this.txtPasswd.UseSystemPasswordChar = true;
             // 
             // lblPasswd
             // 
@@ -106,7 +107,10 @@
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.lblUserName);
             this.Name = "FrmLogin";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Đăng nhập hệ thống";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLogin_FormClosing);
+            this.Load += new System.EventHandler(this.FrmLogin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

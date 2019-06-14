@@ -20,8 +20,7 @@ namespace GUI
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            DialogResult dialog = MessageBox.Show("Bạn thật sự muốn thoát?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (dialog == DialogResult.Yes) Application.Exit();
+                Application.Exit();
         }
 
         BUS_Login login = new BUS_Login();
@@ -32,14 +31,30 @@ namespace GUI
             if (login.Load_BUS(sql).Rows.Count > 0)
             {
                 MessageBox.Show("Đăng nhập thành công");
+                FrmMain.username = txtUserName.Text;
                 FrmMain f = new FrmMain();
-                f.Show();
+                FrmLogin_Load(sender, e);
                 this.Hide();
+                f.ShowDialog();
+                this.Show();
             }
             else
             {
                 MessageBox.Show("Đăng nhập thất bại!");
             }
+        }
+
+        private void FrmLogin_Load(object sender, EventArgs e)
+        {
+            txtUserName.Clear();
+            txtPasswd.Clear();
+        }
+
+        private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Bạn thật sự muốn thoát?", "Thông báo", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result != DialogResult.OK)
+                e.Cancel=true;
         }
     }
 }

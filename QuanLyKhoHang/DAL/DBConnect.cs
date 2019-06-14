@@ -10,7 +10,7 @@ namespace DAL
 {
     public class DBConnect
     {
-        protected SqlConnection con = new SqlConnection(@"Data Source=FLLXOA737G4K4BX\SQLEXPRESS01;Initial Catalog=QuanLyKhoHang_TTNN;Integrated Security=True");
+        protected SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=QuanLyKhoHang_TTNN;Integrated Security=True");
         public DataTable Load(string sql)
         {
             DataTable dt = new DataTable();

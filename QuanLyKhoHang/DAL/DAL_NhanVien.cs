@@ -18,22 +18,23 @@ namespace DAL
 
         public int Insert(NhanVien nv)
         {
-            string sql = "select * from NhanVien where MaNV = '" + nv.MaNV + "'";
-            if (Load_DAL(sql).Rows.Count > 0) return 2;
+            if (Load_DAL("select * from NhanVien where MaNV = '" + nv.MaNV + "'").Rows.Count > 0) return 2;
             else
-                {
-                    SqlCommand cmd = new SqlCommand("Insert_NV", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@manv", nv.MaNV));
-                    cmd.Parameters.Add(new SqlParameter("@ht", nv.HoTen));
-                    cmd.Parameters.Add(new SqlParameter("@ns", Convert.ToDateTime(nv.NgaySinh)));
-                    cmd.Parameters.Add(new SqlParameter("@cmnd", nv.CMND));
-                    cmd.Parameters.Add(new SqlParameter("@gt", nv.GT));
-                    cmd.Parameters.Add(new SqlParameter("@dc", nv.DiaChi));
-                    cmd.Parameters.Add(new SqlParameter("@dt", nv.DT));
-                    cmd.Parameters.Add(new SqlParameter("@email", nv.Email));
-                    try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
-                    try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
+            {
+                string sql = "exec Insert_NV @manv , @ht , @ns , @cmnd , @gt , @dc , @dt , @email";
+                SqlCommand cmd = new SqlCommand(sql, con);
+                object[] param = { nv.MaNV, nv.HoTen, nv.NgaySinh, nv.CMND, nv.GT, nv.DiaChi, nv.DT, nv.Email };
+                int i = 0;
+                string[] lstParam = sql.Split(' ');
+                foreach (string item in lstParam)
+                   if (item.Contains('@'))
+                   {
+                       if (i == 2) cmd.Parameters.AddWithValue(item, Convert.ToDateTime(param[i]));
+                       else cmd.Parameters.AddWithValue(item, param[i]);
+                       i++;
+                   }
+                try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
+                try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
             }
         }
 
@@ -71,6 +72,6 @@ namespace DAL
                 try { if (con.State != ConnectionState.Open) con.Open(); } catch { return -2; }
                 try { cmd.ExecuteNonQuery(); return 1; } catch { return 0; } finally { if (con.State == ConnectionState.Open) con.Close(); }
             }
-        }
+        } 
     }
 }

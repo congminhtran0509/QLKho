@@ -39,6 +39,7 @@
             this.txtNoiDung = new System.Windows.Forms.TextBox();
             this.lblKQ = new System.Windows.Forms.Label();
             this.txtKQ = new System.Windows.Forms.TextBox();
+            this.btnTrangChinh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dtgvKQ)).BeginInit();
             this.SuspendLayout();
             // 
@@ -86,7 +87,7 @@
             // 
             this.btnSearch.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.btnSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearch.Location = new System.Drawing.Point(695, 49);
+            this.btnSearch.Location = new System.Drawing.Point(566, 49);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(93, 34);
             this.btnSearch.TabIndex = 75;
@@ -149,11 +150,24 @@
             this.txtKQ.Size = new System.Drawing.Size(93, 20);
             this.txtKQ.TabIndex = 81;
             // 
+            // btnTrangChinh
+            // 
+            this.btnTrangChinh.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.btnTrangChinh.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTrangChinh.Location = new System.Drawing.Point(683, 49);
+            this.btnTrangChinh.Name = "btnTrangChinh";
+            this.btnTrangChinh.Size = new System.Drawing.Size(105, 34);
+            this.btnTrangChinh.TabIndex = 82;
+            this.btnTrangChinh.Text = "Trang chính";
+            this.btnTrangChinh.UseVisualStyleBackColor = false;
+            this.btnTrangChinh.Click += new System.EventHandler(this.btnTrangChinh_Click);
+            // 
             // Frm_TimKiem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnTrangChinh);
             this.Controls.Add(this.txtKQ);
             this.Controls.Add(this.lblKQ);
             this.Controls.Add(this.txtNoiDung);
@@ -166,6 +180,7 @@
             this.Controls.Add(this.lblLuaChon);
             this.Controls.Add(this.lblThongTin);
             this.Name = "Frm_TimKiem";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tra cứu thông tin";
             this.Load += new System.EventHandler(this.Frm_TimKiem_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgvKQ)).EndInit();
@@ -187,5 +202,6 @@
         private System.Windows.Forms.TextBox txtNoiDung;
         private System.Windows.Forms.Label lblKQ;
         private System.Windows.Forms.TextBox txtKQ;
+        private System.Windows.Forms.Button btnTrangChinh;
     }
 }
